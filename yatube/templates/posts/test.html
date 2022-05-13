@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+<body>
+   <main>
+      {% block content %}
+      <div class="container py-5">
+         <div class="row">
+            <aside class="col-12 col-md-3">
+               <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                     Дата публикации: 31 июля 1854
+                  </li>
+                  <li class="list-group-item">
+                     Группа: Группа: Лев Толстой – зеркало русской революции
+                     <a href="../posts/group_list.html">
+                     все записи группы
+                     </a>
+                  </li>
+                  <li class="list-group-item">
+                     Автор: Лев Толстой leo
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                     Всего постов автора:  <span >36</span>
+                  </li>
+                  <li class="list-group-item">
+                     <a href="../posts/profile.html">
+                     все посты пользователя
+                     </a>
+                  </li>
+               </ul>
+            </aside>
+            <article class="col-12 col-md-9">
+               <img src="../img/tolstoy.jpg" width="960" height="339" alt="">
+               <p>
+                  [Фокшаны.] Еще переходъ до Фокшанъ, во время котораго я ѣхалъ съ Монго. Человѣкъ
+                  пустой, но съ твердыми, хотя и ложными убѣжденіями. Генерал[у] по этому должно
+                  быть случаю, угодно было спрашивать о моемъ здоровьи. Свинья! К[о]вырялъ носъ и
+                  ничего не написалъ — вотъ 2 упрека за нын[ѣшній] день. Послѣдній упрекъ становится
+                  слишкомъ частъ, хотя походъ и можетъ служить въ немъ отчасти извиненіемъ.
+                  Отношенія мои съ товарищами становятся такъ пріятны, что мнѣ жалко бросить штабъ.
+                  Здоровье кажется (2) лучше.
+               </p>
+               <!-- эта кнопка видна только автору -->
+               <a class="btn btn-primary" href="../posts/update_post.html">
+               редактировать запись
+               </a>
+               <!-- эта форма видна только авторизованному пользователю  -->
+               <div class="card my-4">
+                  <h5 class="card-header">Добавить комментарий:</h5>
+                  <div class="card-body">
+                     <!-- action ведет на обработчик формы  -->
+                     <form method="post" action="">
+                        <!-- не забываем генерировать токен!  -->
+                        <input type="hidden" name="csrfmiddlewaretoken" value="">
+                        <div class="form-group mb-2">
+                           <textarea name="text" cols="40" rows="10" class="form-control" required id="id_text">
+                           </textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Отправить</button>
+                     </form>
+                  </div>
+               </div>
+               <!-- комментарии перебираются в цикле  -->
+               <div class="media mb-4">
+                  <div class="media-body">
+                     <h5 class="mt-0">
+                        <a href="../posts/profile.html">
+                        admin
+                        </a>
+                     </h5>
+                     <p>
+                        Монго -- экай чудакъ
+                     </p>
+                  </div>
+               </div>
+               <div class="media mb-4">
+                  <div class="media-body">
+                     <h5 class="mt-0">
+                        <a href="../posts/profile.html">
+                        admin
+                        </a>
+                     </h5>
+                     <p>
+                        Граф - я ваш фанат
+                     </p>
+                  </div>
+               </div>
+            </article>
+         </div>
+      </div>
+   </main>
+   {% endblock %}
+</body>
