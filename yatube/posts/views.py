@@ -39,15 +39,11 @@ def profile(request, username):
     paginator = Paginator(request_of_authors, settings.TEN)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    subscribers = Follow.objects.filter(author_id=author.id)
-    # print("yalog: " + str(subscribers))
-    following = False
-    for it in subscribers:
-        # print("yalog: " + it.user.username + " ; " + it.author.username)
-        if it.user.username == request.user.username:
-            following = True
-            break
-    # post_list = Post.objects.filter(author__following__user=request.user)
+    recordings = Follow.objects.filter(author=author, user=request.user)
+    if request.user.is_authenticated and recordings.exists():
+        following = True
+    else:
+        following = False
     context = {
         'page_obj': page_obj,
         'author': author,
@@ -77,15 +73,14 @@ def post_create(request):
         post.author = request.user
         post.save()
         return redirect('posts:profile', post.author)
-    return render(request, 'posts/create_post.html', {'form': form})
+    return render(request, 'posts/create_post.html', {'form': form, 'is_edit': False})
 
 
-@login_required()
+@login_required
 def post_edit(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     if post.author != request.user:
         return redirect('posts:post_detail', post_id=post_id)
-
     form = PostForm(
         request.POST or None,
         files=request.FILES or None,
@@ -134,13 +129,12 @@ def profile_follow(request, username):
     # Подписаться на автора
     author = get_object_or_404(User, username=username)
     subscription = Follow.objects.filter(user=request.user, author=author)
-    if request.user != author:
-        if subscription.exists():
-            return redirect('posts:profile', username=username)
-        Follow.objects.create(
-            user=request.user,
-            author=author
-        )
+    if author == request.user or (subscription.exists()):
+        return redirect('posts:profile', username=username)
+    Follow.objects.create(
+        user=request.user,
+        author=author
+    )
     return redirect('posts:profile', username=username)
 
 
@@ -148,9 +142,10 @@ def profile_follow(request, username):
 def profile_unfollow(request, username):
     # Дизлайк, отписка
     author = get_object_or_404(User, username=username)
-    person = Follow.objects.filter(
+    record = Follow.objects.filter(
         user=request.user,
         author=author
     )
-    person.delete()
+    if record.exists():
+        record.delete()
     return redirect('posts:profile', username=username)

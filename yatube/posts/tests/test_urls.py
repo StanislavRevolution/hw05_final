@@ -43,7 +43,7 @@ class PostUrlTests(TestCase):
         for template, address in templates_url_names.items():
             with self.subTest(adress=address):
                 response = self.client.get(address)
-                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_available_of_pages_authorized(self):
         """Проводим проверку доступности страниц
@@ -54,12 +54,14 @@ class PostUrlTests(TestCase):
             'posts/group_list.html': f'/group/{self.group.slug}/',
             'posts/profile.html': f'/profile/{self.user.username}/',
             'posts/post_detail.html': f'/posts/{self.post.id}/',
+            'posts/create_post.html': '/create/',
+            'posts/follow.html': '/follow/'
         }
 
         for template, address in templates_url_names.items():
             with self.subTest(adress=address):
                 response = self.authorized_client.get(address)
-                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_weird_page(self):
         """Проверяем переход на несуществующую страницу"""

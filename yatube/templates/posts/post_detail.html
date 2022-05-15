@@ -14,13 +14,13 @@
          </li>
          <!-- если у поста есть группа -->
          {% if post.group %}
-         <li class="list-group-item">
-            Группа: {{ post.group|truncatechars:30 }}
-            <br>
-            <a href="{% url 'posts:group_posts' post.group.slug %}" class="btn btn-danger active"
-               role="button"
-               aria-pressed="true">Все записи группы </a> &#128072
-         </li>
+           <li class="list-group-item">
+              Группа: {{ post.group|truncatechars:30 }}
+              <br>
+              <a href="{% url 'posts:group_posts' post.group.slug %}" class="btn btn-danger active"
+                 role="button"
+                 aria-pressed="true">Все записи группы </a> &#128072
+           </li>
          {% endif %}
          <li class="list-group-item">
             Автор: {{ post.author.get_full_name }}
@@ -47,34 +47,34 @@
       {% endif %}
    </article>
    {% if user.is_authenticated %}
-   <div class="row justify-content-end">
-      <div class="card my-4">
-         <h5 class="card-header">Добавить комментарий:</h5>
-         <div class="card-body">
-            <form method="post" action="{% url 'posts:add_comment' post.id %}">
-               {% csrf_token %}
-               <div class="form-group mb-2">
-                  {{ form.text|addclass:"form-control" }}
-               </div>
-               <button type="submit" class="btn btn-primary">Отправить</button>
-            </form>
-         </div>
-      </div>
-   </div>
+     <div class="row justify-content-end">
+        <div class="card my-4">
+           <h5 class="card-header">Добавить комментарий:</h5>
+           <div class="card-body">
+              <form method="post" action="{% url 'posts:add_comment' post.id %}">
+                 {% csrf_token %}
+                 <div class="form-group mb-2">
+                    {{ form.text|addclass:"form-control" }}
+                 </div>
+                 <button type="submit" class="btn btn-primary">Отправить</button>
+              </form>
+           </div>
+        </div>
+     </div>
    {% endif %}
    {% for comment in comments %}
-   <div class="media mb-4">
-      <div class="media-body">
-         <h5 class="mt-0">
-            <a href="{% url 'posts:profile' comment.author.username %}">
-            {{ comment.author.username }}
-            </a>
-         </h5>
-         <p>
-            {{ comment.text }}
-         </p>
-      </div>
-   </div>
+     <div class="media mb-4">
+        <div class="media-body">
+           <h5 class="mt-0">
+              <a href="{% url 'posts:profile' comment.author.username %}">
+              {{ comment.author.username }}
+              </a>
+           </h5>
+           <p>
+              {{ comment.text }}
+           </p>
+        </div>
+     </div>
    {% endfor %}
 </div>
 {% endblock %}

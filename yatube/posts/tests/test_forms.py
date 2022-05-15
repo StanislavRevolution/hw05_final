@@ -3,7 +3,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from ..models import Post, Group
+from ..models import Post, Group, Comment
 
 User = get_user_model()
 
@@ -77,23 +77,23 @@ class TaskCreateFormTests(TestCase):
             ).exists()
         )
 
-    # def test_of_comments_posts(self):
-    #     post = Post.objects.create(
-    #         author=self.user,
-    #         text='test-text',
-    #     )
-    #     form_data = {
-    #         'text': 'test-comment'
-    #     }
-    #     response = self.authorized_user.post(
-    #         reverse('posts:post_detail', kwargs={"post_id": post.pk}),
-    #         data=form_data,
-    #         follow=True
-    #     )
-    #     self.assertTrue(
-    #         Comment.objects.filter(
-    #             text=form_data['text'],
-    #             author=self.user,
-    #             post=post
-    #         ).exists()
-    #     )
+    def test_of_comments_posts(self):
+        post = Post.objects.create(
+            author=self.user,
+            text='test-text',
+        )
+        form_data = {
+            'text': 'test-comment'
+        }
+        self.authorized_user.post(
+            reverse('posts:add_comment', kwargs={"post_id": post.pk}),
+            data=form_data,
+            follow=True
+        )
+        self.assertTrue(
+            Comment.objects.filter(
+                text=form_data['text'],
+                author=self.user,
+                post=post
+            ).exists()
+        )
