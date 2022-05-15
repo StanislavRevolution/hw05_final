@@ -39,8 +39,9 @@ def profile(request, username):
     paginator = Paginator(request_of_authors, settings.TEN)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    recordings = Follow.objects.filter(author=author, user=request.user)
-    if request.user.is_authenticated and recordings.exists():
+    if request.user.is_authenticated \
+            and\
+            Follow.objects.filter(author=author, user=request.user).exists():
         following = True
     else:
         following = False
