@@ -307,7 +307,10 @@ class PaginatorTests(TestCase):
     def test_first_page_contains_ten_records(self):
         response = self.guest_client.get(reverse('posts:index'))
         # Проверка: количество постов на первой странице равно 10.
-        self.assertEqual(len(response.context['page_obj']), settings.NUMBER_TEN)
+        self.assertEqual(
+            len(response.context['page_obj']),
+            settings.NUMBER_TEN
+        )
 
     def test_second_page_contains_five_records(self):
         # Проверка: на второй странице должно быть пять постов.
@@ -321,7 +324,10 @@ class PaginatorTests(TestCase):
                 kwargs={'slug': self.group.slug}
             )
         )
-        self.assertEqual(len(response.context['page_obj']), settings.NUMBER_TEN)
+        self.assertEqual(
+            len(response.context['page_obj']),
+            settings.NUMBER_TEN
+        )
 
     def test_paginator_of_profile(self):
         response = self.authorized_client.get(
@@ -330,4 +336,7 @@ class PaginatorTests(TestCase):
                 kwargs={'username': self.user.username}
             )
         )
-        self.assertEqual(len(response.context['page_obj']), settings.NUMBER_TEN)
+        self.assertEqual(
+            len(response.context['page_obj']),
+            settings.NUMBER_TEN
+        )
