@@ -1,7 +1,5 @@
 {% load thumbnail %}
 <article>
-   {% load cache %}
-   {% cache 20 index_page page_obj %}
    {% for post in page_obj %}
      <ul>
         <li>
@@ -21,11 +19,10 @@
      </div>
      {% if post.group %}
        <a href="{% url 'posts:group_posts' post.group.slug %}" class="btn btn-danger active" role="button"
-          aria-pressed="true">Все записи данной группы 😊</a>
+          aria-pressed="true">Все записи группы: {{ post.group.title }} 😊</a>
      {% endif %}
      {% if not forloop.last %}
        <hr>
      {% endif %}
    {% endfor %}
-   {% endcache %}
 </article>

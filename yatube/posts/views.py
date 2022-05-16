@@ -8,8 +8,8 @@ from .models import Post, Group, User, Comment, Follow
 
 
 def index(request):
-    request_of_posts = Post.objects.all()
-    paginator = Paginator(request_of_posts, settings.TEN)
+    request_of_posts = Post.objects.select_related('author', 'group').all()
+    paginator = Paginator(request_of_posts, settings.NUMBER_TEN)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     template = 'posts/index.html'
@@ -23,7 +23,7 @@ def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
     template = 'posts/group_list.html'
     request_of_group = group.posts.all()
-    paginator = Paginator(request_of_group, settings.TEN)
+    paginator = Paginator(request_of_group, settings.NUMBER_TEN)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
@@ -36,12 +36,14 @@ def group_posts(request, slug):
 def profile(request, username):
     author = User.objects.get(username=username)
     request_of_authors = author.posts.all()
-    paginator = Paginator(request_of_authors, settings.TEN)
+    paginator = Paginator(request_of_authors, settings.NUMBER_TEN)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    if request.user.is_authenticated \
-            and\
-            Follow.objects.filter(author=author, user=request.user).exists():
+    if (request.user.is_authenticated
+            and Follow.objects.filter(
+                author=author,
+                user=request.user
+            ).exists()):
         following = True
     else:
         following = False
@@ -120,7 +122,7 @@ def follow_index(request):
     request_of_posts = Post.objects.filter(
         author__following__user=request.user
     )
-    paginator = Paginator(request_of_posts, settings.TEN)
+    paginator = Paginator(request_of_posts, settings.NUMBER_TEN)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {

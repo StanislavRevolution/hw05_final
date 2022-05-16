@@ -37,7 +37,7 @@ class PostUrlTests(TestCase):
             'posts/index.html': '/',
             'posts/group_list.html': f'/group/{self.group.slug}/',
             'posts/profile.html': f'/profile/{self.user.username}/',
-            'posts/post_detail.html': f'/posts/{self.post.id}/',
+            'posts/post_detail.html': f'/posts/{self.post.id}/'
         }
 
         for template, address in templates_url_names.items():
@@ -66,7 +66,7 @@ class PostUrlTests(TestCase):
     def test_weird_page(self):
         """Проверяем переход на несуществующую страницу"""
         response = self.client.get('/weird/page/')
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
     def test_only_authorized(self):
         """Доступ к странице создания поста только авториз. польз."""
@@ -85,9 +85,10 @@ class PostUrlTests(TestCase):
         templates_url_names = {
             'posts/index.html': '/',
             'posts/group_list.html': f'/group/{self.group.slug}/',
-            # 'posts/profile.html': f'/profile/{self.user.username}/',
+            'posts/profile.html': f'/profile/{self.user.username}/',
             'posts/post_detail.html': f'/posts/{self.post.id}/',
-            'posts/create_post.html': f'/posts/{self.post.id}/edit/'
+            'posts/create_post.html': f'/posts/{self.post.id}/edit/',
+            'posts/follow.html': '/follow/'
         }
 
         for template, address in templates_url_names.items():

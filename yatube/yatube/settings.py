@@ -119,7 +119,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-TEN = 10
+NUMBER_TEN = 10
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

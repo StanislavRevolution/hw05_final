@@ -1,6 +1,7 @@
 from django import forms
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -217,19 +218,15 @@ class TaskPagesTests(TestCase):
         first_object = response.context['comments'][0]
         self.assertEqual(first_object, comment)
 
-    # def test_work_of_cache(self):
-    #     post_for_cache = Post.objects.create(
-    #         author=self.user,
-    #         text='test-cache'
-    #     )
-    #     response1 = self.authorized_client.get(reverse('posts:index'))
-    #     post_for_cache.delete()
-    #     response2 = self.authorized_client.get(reverse('posts:index'))
-    #     self.assertEqual(response1.content, response2.content)
-    #     cache.clear()
-    #     response3 = self.authorized_client.get(reverse('posts:index'))
-    #     self.assertNotEqual(response1.content, response3.content)
-    #     cache.clear()
+    def test_work_of_cache(self):
+        response1 = self.authorized_client.get(reverse('posts:index'))
+        Post.objects.create(
+            author=self.user,
+            text='test-cache'
+        )
+        cache.clear()
+        response2 = self.authorized_client.get(reverse('posts:index'))
+        self.assertNotEqual(response1.content, response2.content)
 
     def test_follow_on_users(self):
         maxim = User.objects.create_user(username='Maxim')
@@ -310,7 +307,7 @@ class PaginatorTests(TestCase):
     def test_first_page_contains_ten_records(self):
         response = self.guest_client.get(reverse('posts:index'))
         # Проверка: количество постов на первой странице равно 10.
-        self.assertEqual(len(response.context['page_obj']), settings.TEN)
+        self.assertEqual(len(response.context['page_obj']), settings.NUMBER_TEN)
 
     def test_second_page_contains_five_records(self):
         # Проверка: на второй странице должно быть пять постов.
@@ -324,7 +321,7 @@ class PaginatorTests(TestCase):
                 kwargs={'slug': self.group.slug}
             )
         )
-        self.assertEqual(len(response.context['page_obj']), settings.TEN)
+        self.assertEqual(len(response.context['page_obj']), settings.NUMBER_TEN)
 
     def test_paginator_of_profile(self):
         response = self.authorized_client.get(
@@ -333,4 +330,4 @@ class PaginatorTests(TestCase):
                 kwargs={'username': self.user.username}
             )
         )
-        self.assertEqual(len(response.context['page_obj']), settings.TEN)
+        self.assertEqual(len(response.context['page_obj']), settings.NUMBER_TEN)
