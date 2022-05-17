@@ -1,7 +1,4 @@
 {% load static %}
-
-<!-- Использованы классы бустрапа для создания типовой навигации с логотипом -->
-<!-- В дальнейшем тут будет создано полноценное меню -->
 <nav class="navbar navbar-light" style="background-color: Salmon">
     <div class="container">
         <a class="navbar-brand" href="{% url 'posts:index' %}">
@@ -9,10 +6,6 @@
             <!-- тег span используется для добавления нужных стилей отдельным участкам текста -->
             <span style="color:red">Ya</span>tube</a>
         </a>
-        {% comment %}
-      Меню - список пунктов со стандартными классами Bootsrap.
-      Класс nav-pills нужен для выделения активных пунктов
-      {% endcomment %}
         {% with request.resolver_match.view_name as view_name %}
             <ul class="nav nav-pills">
                 <li class="nav-item">
@@ -58,6 +51,5 @@
                 {% endif %}
             </ul>
         {% endwith %}
-        {# Конец добавленого в спринте #}
     </div>
 </nav>

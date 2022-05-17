@@ -136,7 +136,7 @@ def profile_follow(request, username):
     # Подписаться на автора
     author = get_object_or_404(User, username=username)
     subscription = Follow.objects.filter(user=request.user, author=author)
-    if author == request.user or (subscription.exists()):
+    if author == request.user or subscription.exists():
         return redirect('posts:profile', username=username)
     Follow.objects.create(
         user=request.user,

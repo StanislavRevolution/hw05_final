@@ -4,10 +4,13 @@
   Эта главная страница проекта Yatube
 {% endblock %}
 {% block content %}
-<h1>
-  Последние обновления на сайте
-</h1>
-{% include 'posts/includes/switcher.html' %}
-{% include 'posts/includes/post_list.html' %}
-{% include 'posts/includes/paginator.html' %}
+  <h1>
+    Последние обновления на сайте
+  </h1>
+  {% include 'posts/includes/switcher.html' %}
+  {% load cache %}
+  {% cache 20 index_page page_obj %}
+  {% include 'posts/includes/post_list.html' %}
+  {% endcache %}
+  {% include 'posts/includes/paginator.html' %}
 {% endblock %}

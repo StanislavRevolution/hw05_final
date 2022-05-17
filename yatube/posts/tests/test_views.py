@@ -224,9 +224,13 @@ class TaskPagesTests(TestCase):
             author=self.user,
             text='test-cache'
         )
-        cache.clear()
         response2 = self.authorized_client.get(reverse('posts:index'))
-        self.assertNotEqual(response1.content, response2.content)
+        request_object_before_post = response1.context['page_obj'][0]
+        request_object_after_post = response2.context['page_obj'][0]
+        self.assertEqual(request_object_before_post, request_object_after_post)
+        cache.clear()
+        response3 = self.authorized_client.get(reverse('posts:index'))
+        self.assertNotEqual(response1.content, response3.content)
 
     def test_follow_on_users(self):
         maxim = User.objects.create_user(username='Maxim')
